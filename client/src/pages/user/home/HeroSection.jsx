@@ -41,14 +41,14 @@ const HeroWrapper = styled.section`
   background: ${CANVAS};
   border-bottom: 1px solid ${LINE};
   overflow: hidden;
-  padding: 3rem 1.25rem 3.5rem;
+  padding: 2.5rem 1.25rem 3.5rem;
 
   @media ${media.tabletUp} {
-    padding: 4.5rem 2.5rem 4.5rem;
+    padding: 3.5rem 2.5rem 4rem;
   }
 
   @media ${media.desktop} {
-    padding: 5.5rem 3.5rem 5rem;
+    padding: 4.5rem 3.5rem 4.5rem;
   }
 `;
 
@@ -57,7 +57,11 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 3.5rem;
+  gap: 2.75rem;
+
+  @media ${media.desktop} {
+    gap: 3.5rem;
+  }
 `;
 
 const TopMetaRow = styled.div`
@@ -66,7 +70,7 @@ const TopMetaRow = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
   border-bottom: 1px solid ${LINE};
   animation: ${slideUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 `;
@@ -99,23 +103,107 @@ const EditionTag = styled.div`
   color: ${MUTED};
 `;
 
+/**
+ * Main Layout Container:
+ * On Mobile (< 1024px): Flex column where the right-side hero image comes FIRST (order: 1)
+ * and the left-side text copy follows SECOND (order: 2).
+ * On Desktop (>= 1024px): 2-Column Grid where text copy is on the left (order: 1)
+ * and hero image is on the right (order: 2).
+ */
 const MainGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  align-items: end;
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
 
   @media ${media.desktop} {
-    grid-template-columns: 1.35fr 0.85fr;
-    gap: 4rem;
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+`;
+
+const HeroImageColumn = styled.div`
+  order: 1;
+  width: 100%;
+  position: relative;
+  animation: ${slideUp} 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @media ${media.desktop} {
+    order: 2;
+  }
+`;
+
+const ImageCard = styled.div`
+  position: relative;
+  width: 100%;
+  background: ${WHITE};
+  border: 1px solid ${LINE};
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(17, 20, 24, 0.08);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+
+  &:hover {
+    border-color: ${NAVY_ACCENT};
+    box-shadow: 0 18px 40px rgba(102, 138, 83, 0.16);
+
+    img {
+      transform: scale(1.02);
+    }
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: clamp(300px, 46vh, 560px);
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+`;
+
+const ImageBadge = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(17, 20, 24, 0.88);
+  backdrop-filter: blur(8px);
+  color: ${WHITE};
+  font-family: ${FONT_HERO};
+  font-size: 0.65625rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  z-index: 2;
+
+  .accent-circle {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: ${NAVY_ACCENT};
+    box-shadow: 0 0 6px rgba(102, 138, 83, 0.8);
   }
 `;
 
 const TitleColumn = styled.div`
+  order: 2;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.15rem;
   animation: ${slideUp} 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+
+  @media ${media.desktop} {
+    order: 1;
+    gap: 1.25rem;
+  }
 `;
 
 const SubtitleTag = styled.span`
@@ -131,9 +219,9 @@ const SubtitleTag = styled.span`
 
 const DisplayHeading = styled.h1`
   font-family: ${FONT_HERO};
-  font-size: clamp(2.8rem, 8.8vw, 7.8rem);
+  font-size: clamp(2.6rem, 7.5vw, 6.8rem);
   font-weight: 900;
-  line-height: 0.88;
+  line-height: 0.9;
   letter-spacing: -0.04em;
   color: ${INK};
   text-transform: uppercase;
@@ -144,20 +232,14 @@ const DisplayHeading = styled.h1`
     display: block;
     text-shadow: 0 4px 30px rgba(102, 138, 83, 0.18);
   }
-
-  .italic-sub {
-    font-style: italic;
-    font-weight: 800;
-    letter-spacing: -0.05em;
-  }
 `;
 
 const NarrativeText = styled.p`
-  font-size: clamp(0.9375rem, 1.25vw, 1.1875rem);
+  font-size: clamp(0.9375rem, 1.2vw, 1.125rem);
   line-height: 1.6;
   color: #3b424a;
-  max-width: 640px;
-  margin: 0.5rem 0 1rem;
+  max-width: 620px;
+  margin: 0.25rem 0 0.85rem;
 `;
 
 const ActionButtonGroup = styled.div`
@@ -165,7 +247,7 @@ const ActionButtonGroup = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 `;
 
 const PrimaryCta = styled(Link)`
@@ -179,7 +261,7 @@ const PrimaryCta = styled(Link)`
   letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 1.15rem 2.6rem;
+  padding: 1.1rem 2.4rem;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 6px 18px rgba(17, 20, 24, 0.16);
 
@@ -205,7 +287,7 @@ const SecondaryCta = styled(Link)`
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 1.15rem 2rem;
+  padding: 1.1rem 2rem;
   border: 1px solid ${INK};
   transition: all 0.25s ease;
 
@@ -214,72 +296,6 @@ const SecondaryCta = styled(Link)`
     color: ${NAVY_ACCENT};
     background: rgba(102, 138, 83, 0.05);
     transform: translateY(-2px);
-  }
-`;
-
-const FeatureColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  animation: ${slideUp} 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-`;
-
-const CategorySnippetCard = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  background: #EBE8E1;
-  border: 1px solid ${LINE};
-  text-decoration: none;
-  color: ${INK};
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-
-  .tag-num {
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    color: ${NAVY_ACCENT};
-  }
-
-  .tag-title {
-    font-family: ${FONT_HERO};
-    font-size: 0.9375rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin: 0 0 0.15rem;
-  }
-
-  .tag-desc {
-    font-size: 0.75rem;
-    color: #555e6b;
-    margin: 0;
-  }
-
-  .arrow-box {
-    width: 32px;
-    height: 32px;
-    border: 1px solid ${LINE};
-    background: ${WHITE};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: ${INK};
-    transition: all 0.2s ease;
-  }
-
-  &:hover {
-    border-color: ${NAVY_ACCENT};
-    background: ${WHITE};
-    transform: translateX(4px);
-    box-shadow: 0 8px 20px rgba(17, 20, 24, 0.06);
-
-    .arrow-box {
-      background: ${NAVY_ACCENT};
-      color: ${WHITE};
-      border-color: ${NAVY_ACCENT};
-    }
   }
 `;
 
@@ -339,8 +355,24 @@ const HeroSection = () => {
           </EditionTag>
         </TopMetaRow>
 
-        {/* Main Content Grid */}
+        {/* Main Content Grid: Image First on Mobile, Right on Desktop */}
         <MainGrid>
+          {/* Visual Hero Campaign Image */}
+          <HeroImageColumn>
+            <ImageCard>
+              <ImageBadge>
+                <span className="accent-circle" />
+                <span>ARCHIVE // RELEASE 01</span>
+              </ImageBadge>
+              <img
+                src="/gomode-hero.png"
+                alt="GoMode Apparel Campaign"
+                loading="eager"
+              />
+            </ImageCard>
+          </HeroImageColumn>
+
+          {/* Text Title & Call-To-Action Column */}
           <TitleColumn>
             <SubtitleTag>
               <Sparkles size={14} />
@@ -366,52 +398,6 @@ const HeroSection = () => {
               </SecondaryCta>
             </ActionButtonGroup>
           </TitleColumn>
-
-          <FeatureColumn>
-            <CategorySnippetCard to="/shop?category=Outerwear%20%26%20Jackets">
-              <div>
-                <span className="tag-num">01 / DROP</span>
-                <h4 className="tag-title">Outerwear & Leather</h4>
-                <p className="tag-desc">Classic Shearling Aviator & Heavy Layers</p>
-              </div>
-              <div className="arrow-box">
-                <ArrowRight size={14} />
-              </div>
-            </CategorySnippetCard>
-
-            <CategorySnippetCard to="/shop?category=Denim%20%26%20Jeans">
-              <div>
-                <span className="tag-num">02 / DENIM</span>
-                <h4 className="tag-title">90s Loose & Relaxed</h4>
-                <p className="tag-desc">Rigid Light Wash & Overdyed Jet Black</p>
-              </div>
-              <div className="arrow-box">
-                <ArrowRight size={14} />
-              </div>
-            </CategorySnippetCard>
-
-            <CategorySnippetCard to="/shop?category=Sweaters%20%26%20Knits">
-              <div>
-                <span className="tag-num">03 / KNIT</span>
-                <h4 className="tag-title">Tactile Knits & Polos</h4>
-                <p className="tag-desc">Textured Wool Blends & Argyle Cardigans</p>
-              </div>
-              <div className="arrow-box">
-                <ArrowRight size={14} />
-              </div>
-            </CategorySnippetCard>
-
-            <CategorySnippetCard to="/shop?category=Bags%20%26%20Accessories">
-              <div>
-                <span className="tag-num">04 / CARRY</span>
-                <h4 className="tag-title">Bags & Everyday Goods</h4>
-                <p className="tag-desc">Canvas Commuters & Embossed Belts</p>
-              </div>
-              <div className="arrow-box">
-                <ArrowRight size={14} />
-              </div>
-            </CategorySnippetCard>
-          </FeatureColumn>
         </MainGrid>
 
         {/* Specs & Assurance Bar */}
