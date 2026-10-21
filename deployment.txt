@@ -163,25 +163,37 @@ Render Free Web Services spin down to sleep after 15 minutes of inactivity.
 Setting up a cron ping keeps the backend awake 24/7 so visitors never experience
 cold-start loading delays.
 
-1. Keep-Alive / Wake-up Cron (cron-job.org or UptimeRobot):
-   - Service:     https://cron-job.org (100% Free) or https://uptimerobot.com
-   - Title:       GoMode API Keep-Alive
-   - URL:         https://gomode-api.onrender.com/api/healthz
-                  (or: https://gomode-api.onrender.com/health)
-   - HTTP Method: GET
-   - Schedule:    Every 10 minutes (cron: `*/10 * * * *`)
-   - Notice:      The `/api/healthz` endpoint is specifically placed BEFORE
-                  the API rate limiter in server/index.js, ensuring it never
-                  gets blocked or rate-limited.
+1. Automated GitHub Actions Keep-Alive Cron (Built-in to Repository):
+   - Workflow File:   .github/workflows/keepalive.yml
+   - Schedule:        Every 10 minutes (cron: `*/10 * * * *`)
+   - Target URL:      https://gomode-api.onrender.com/api/healthz
+   - How it works:    Runs automatically on GitHub Actions in the samuel6814/gomode
+                      repository once pushed. No 3rd-party account required!
 
-2. Dashboard Metrics Precomputation Cron (Optional on Render):
-   - If running heavy analytics aggregates periodically:
-   - On Render Dashboard: Click "New +" -> "Cron Job"
-   - Name:             gomode-stats-cron
-   - Root Directory:   server
-   - Command:          node cron/run.js
-   - Schedule:         Every 15 minutes (`*/15 * * * *`) or hourly (`0 * * * *`)
-   - Environment:      Same DATABASE_URL as the main web service.
+2. External Keep-Alive Cron (cron-job.org or UptimeRobot):
+   - Service:         https://cron-job.org (100% Free) or https://uptimerobot.com
+   - Title:           GoMode API Keep-Alive
+   - URL:             https://gomode-api.onrender.com/api/healthz
+                      (or: https://gomode-api.onrender.com/health)
+   - HTTP Method:     GET
+   - Schedule:        Every 10 minutes (cron: `*/10 * * * *`)
+   - Notice:          The `/api/healthz` endpoint is specifically placed BEFORE
+                      the API rate limiter in server/index.js, ensuring it never
+                      gets blocked or rate-limited.
+
+3. Dashboard Metrics Precomputation Cron (Render Native):
+   - Included in:     render.yaml (`gomode-stats-cron`)
+   - Manual Setup:    On Render Dashboard: Click "New +" -> "Cron Job"
+   - Name:            gomode-stats-cron
+   - Root Directory:  server
+   - Command:         node cron/run.js (or: `npm run cron:stats`)
+   - Schedule:        Every 10 minutes (`*/10 * * * *`)
+   - Environment:     Same DATABASE_URL as the main web service.
+
+4. Local / Manual CLI Cron Runners:
+   - In server directory:
+     - `npm run cron:keepalive` -> Pings https://gomode-api.onrender.com/api/healthz
+     - `npm run cron:stats`     -> Computes and caches dashboard revenue & order metrics
 
 ================================================================================
                             DEPLOYMENT READY

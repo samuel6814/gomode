@@ -11,7 +11,9 @@
     "build": "prisma generate && prisma migrate deploy",
     "postinstall": "prisma generate",
     "dev": "nodemon index.js",
-    "sitemap": "node scripts/generateSitemap.js"
+    "sitemap": "node scripts/generateSitemap.js",
+    "cron:stats": "node cron/run.js",
+    "cron:keepalive": "node cron/keepAlivePing.js"
   },
   "keywords": [],
   "author": "",

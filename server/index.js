@@ -137,7 +137,7 @@ app.use('/api', globalLimiter);
 
 // --- 3. Health Check Route ---
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'Your Brand API Gateway is running' });
+  res.status(200).json({ status: 'OK', message: 'GoMode API Gateway is running' });
 });
 
 // --- 4. API Routes ---

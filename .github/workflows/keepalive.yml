@@ -1,0 +1,23 @@
+name: GoMode API Keep-Alive Cron
+
+on:
+  schedule:
+    # Runs every 10 minutes to prevent Render free-tier web services from sleeping
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-api:
+    name: Ping GoMode Render Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Keep-Alive HTTP Ping
+        run: |
+          echo "Pinging https://gomode-api.onrender.com/api/healthz ..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "https://gomode-api.onrender.com/api/healthz" || echo "FAIL")
+          echo "Health endpoint response status: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ GoMode backend is alive and responding!"
+          else
+            echo "⚠️ Health check returned status $STATUS (service may be waking up or DNS resolving)."
+          fi

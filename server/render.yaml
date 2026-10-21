@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: buyy-api
+    name: gomode-api
     runtime: node
     rootDir: server
     buildCommand: npm install && npm run build
@@ -50,20 +50,20 @@ services:
       - key: ADMIN_EMAIL
         sync: false
   - type: cron
-    name: buyy-dashboard-stats
+    name: gomode-stats-cron
     runtime: node
     rootDir: server
-    schedule: "*/5 * * * *"
+    schedule: "*/10 * * * *"
     buildCommand: npm install
     startCommand: node cron/run.js
     envVars:
       - key: DATABASE_URL
         fromService:
           type: web
-          name: buyy-api
+          name: gomode-api
           envVarKey: DATABASE_URL
       - key: DIRECT_URL
         fromService:
           type: web
-          name: buyy-api
+          name: gomode-api
           envVarKey: DIRECT_URL
