@@ -263,7 +263,7 @@ const CraftHeritageStory = () => {
           <span className="eyebrow">Artisanal Ethos</span>
           <h2>Where Accra Heritage Meets Modern Silhouettes</h2>
           <p className="lead">
-            GoMode was born to bridge the gap between world-class international footwear culture and the vibrant soul of contemporary West Africa. Every silhouette is engineered for lasting elegance, dynamic comfort, and timeless presence.
+            GoMode was born to bridge the gap between elevated international streetwear and the vibrant soul of contemporary West Africa. Every garment is crafted for lasting elegance, tactile comfort, and unmistakable silhouette presence.
           </p>
 
           <PillarsList>
@@ -274,7 +274,7 @@ const CraftHeritageStory = () => {
               <div className="text-box">
                 <h4>Authentic Materials & Finishes</h4>
                 <p>
-                  Hand-selected premium suedes, durable full-grain leathers, and breathable technical textiles treated for durability in both tropical and global climates.
+                  Hand-selected heavy corduroys, rigid denim twills, eco-friendly TENCEL™ blends, and faux-shearling trims engineered for all-season longevity.
                 </p>
               </div>
             </PillarItem>
@@ -284,9 +284,9 @@ const CraftHeritageStory = () => {
                 <Compass size={20} />
               </div>
               <div className="text-box">
-                <h4>Ergonomic Orthotic Tooling</h4>
+                <h4>Ergonomic Tailoring & Fits</h4>
                 <p>
-                  Anatomical cork-latex footbeds, EVA shock mitigation, and decoupled outsole pods engineered to ensure unmatched comfort from morning to evening.
+                  Proportioned 90s baggy profiles, relaxed straight cuts, and structured outerwear dropped shoulders ensuring effortless daily drape.
                 </p>
               </div>
             </PillarItem>
@@ -298,7 +298,7 @@ const CraftHeritageStory = () => {
               <div className="text-box">
                 <h4>Small-Batch Curation</h4>
                 <p>
-                  Strict quality over mass production. Each release is hand-curated, verified, and delivered directly to the collector.
+                  Strict quality over mass production. Every piece is inspected, verified, and shipped directly to discerning wearers across Ghana.
                 </p>
               </div>
             </PillarItem>
@@ -314,8 +314,8 @@ const CraftHeritageStory = () => {
           <VisualCard>
             <SealBadge>Est. 2024 • Accra</SealBadge>
             <img
-              src="/items/shoe108.jpg"
-              alt="GoMode Heritage Craft Footwear"
+              src="/new-items/Bomber jacket.avif"
+              alt="GoMode Heritage Craft Apparel"
               className="showcase-img"
             />
           </VisualCard>

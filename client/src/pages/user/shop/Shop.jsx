@@ -507,10 +507,10 @@ const Shop = () => {
       <HeaderSection>
         <div>
           <HeaderTitle>
-            SNEAKER <span>GARDEN</span> CATALOG
+            GO <span>MODE</span> ARCHIVE
           </HeaderTitle>
           <HeaderSubtitle>
-            Handcrafted silhouettes, contemporary sneakers, sculpted clogs, and iconic sandals designed for modern elegance.
+            Structured outerwear, heavyweight relaxed denim, tactile wool knits, and commuter accessories designed for modern presence.
           </HeaderSubtitle>
         </div>
       </HeaderSection>

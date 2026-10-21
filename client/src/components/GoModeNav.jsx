@@ -23,6 +23,7 @@ import {
   CANVAS,
   WHITE,
 } from '../theme/brand';
+import BuyyLogo from './BuyyLogo';
 
 const NavHeader = styled.header`
   position: relative;
@@ -104,25 +105,10 @@ const CenterLogo = styled(Link)`
   text-decoration: none;
   z-index: 10;
   pointer-events: auto;
+  transition: transform 0.25s ease;
 
-  img {
-    height: 105px;
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.09));
-    transition: transform 0.25s ease;
-
-    @media (min-width: 1024px) {
-      height: 125px;
-    }
-
-    @media (max-width: 899px) {
-      height: 80px;
-    }
-  }
-
-  &:hover img {
-    transform: scale(1.08);
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.05);
   }
 `;
 
@@ -293,11 +279,6 @@ const DrawerHeader = styled.div`
   margin-bottom: 2.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid ${LINE};
-
-  img {
-    height: 64px;
-    width: auto;
-  }
 `;
 
 const DrawerNav = styled.div`
@@ -354,10 +335,10 @@ const GoModeNav = ({ cartCount = 0, onOpenCart }) => {
         <NavContainer>
           {/* Left Category Links */}
           <LeftLinks>
-            <NavItem to="/shop?category=Sneakers">SNEAKERS</NavItem>
-            <NavItem to="/shop?category=Boots">BOOTS</NavItem>
-            <NavItem to="/shop?category=Essentials">ESSENTIALS</NavItem>
-            <NavItem to="/shop?category=Collabs">COLLABS</NavItem>
+            <NavItem to="/shop?category=Outerwear%20%26%20Jackets">OUTERWEAR</NavItem>
+            <NavItem to="/shop?category=Denim%20%26%20Jeans">DENIM</NavItem>
+            <NavItem to="/shop?category=Sweaters%20%26%20Knits">KNITS</NavItem>
+            <NavItem to="/shop?category=Bags%20%26%20Accessories">ACCESSORIES</NavItem>
           </LeftLinks>
 
           {/* Mobile Menu Button */}
@@ -369,9 +350,9 @@ const GoModeNav = ({ cartCount = 0, onOpenCart }) => {
             <Menu size={24} />
           </MobileMenuToggle>
 
-          {/* Center Brand Icon (logo-nobg.png only, no text) */}
+          {/* Center Brand Text Logo */}
           <CenterLogo to="/" aria-label="GoMode Home">
-            <img src="/logo-nobg.png" alt="GoMode" />
+            <BuyyLogo size={32} />
           </CenterLogo>
 
           {/* Right Action Icons */}
@@ -427,7 +408,7 @@ const GoModeNav = ({ cartCount = 0, onOpenCart }) => {
           onClick={(e) => e.stopPropagation()}
         >
           <DrawerHeader>
-            <img src="/logo-nobg.png" alt="GoMode" />
+            <BuyyLogo size={24} />
             <ActionIcon
               type="button"
               aria-label="Close menu"
@@ -440,46 +421,46 @@ const GoModeNav = ({ cartCount = 0, onOpenCart }) => {
           {/* Search bar inside hamburger menu */}
           <DrawerSearchBar
             type="button"
-            aria-label="Search footwear & collections"
+            aria-label="Search apparel & collections"
             onClick={() => {
               setMobileOpen(false);
               handleSearchClick();
             }}
           >
             <Search size={18} color={MUTED} />
-            <span>Search footwear & collections...</span>
+            <span>Search apparel & collections...</span>
           </DrawerSearchBar>
 
           <DrawerNav>
             <DrawerItem
-              to="/shop?category=Sneakers"
+              to="/shop?category=Outerwear%20%26%20Jackets"
               onClick={() => setMobileOpen(false)}
             >
-              Sneakers
+              Outerwear & Jackets
             </DrawerItem>
             <DrawerItem
-              to="/shop?category=Clogs%20%26%20Slip-Ons"
+              to="/shop?category=Denim%20%26%20Jeans"
               onClick={() => setMobileOpen(false)}
             >
-              Clogs & Slip-Ons
+              Denim & Jeans
             </DrawerItem>
             <DrawerItem
-              to="/shop?category=Sandals"
+              to="/shop?category=Sweaters%20%26%20Knits"
               onClick={() => setMobileOpen(false)}
             >
-              Sandals
+              Knitwear & Polos
             </DrawerItem>
             <DrawerItem
-              to="/shop?category=Slip-Ons%20%26%20Flats"
+              to="/shop?category=Bags%20%26%20Accessories"
               onClick={() => setMobileOpen(false)}
             >
-              Slip-Ons & Flats
+              Bags & Accessories
             </DrawerItem>
             <DrawerItem
               to="/shop"
               onClick={() => setMobileOpen(false)}
             >
-              All Footwear
+              Discover All Pieces
             </DrawerItem>
             <DrawerItem
               to="/wishlist"

@@ -7,7 +7,7 @@ import apiClient from '../../../api/axios';
 import Currency from '../../../utils/Currency';
 import { ProductGridSkeleton } from '../../../components/ui/Skeleton';
 import SEO from '../../../components/SEO';
-import { CANVAS, NAVY_ACCENT, INK, LINE, FONT_HERO } from '../../../theme/brand';
+import { CANVAS, NAVY_ACCENT, INK, LINE, FONT_HERO, SITE_URL } from '../../../theme/brand';
 
 const PageWrapper = styled.div`
   background: ${CANVAS};
@@ -329,7 +329,7 @@ const CategoryPage = () => {
     itemListElement: allProducts.slice(0, 20).map((product, idx) => ({
       '@type': 'ListItem',
       position: idx + 1,
-      url: `https://sneakergarden.com/product/${product.id}`,
+      url: `${SITE_URL}/product/${product.id}`,
       name: product.name,
     })),
   };
@@ -337,7 +337,7 @@ const CategoryPage = () => {
   return (
     <>
       <SEO
-        title="Footwear Categories & Collections | GoMode"
+        title="Apparel Categories & Collections | GoMode"
         description="Explore GoMode curated footwear collections: handcrafted sneakers, sculpted clogs, sleek sandals, and luxury slip-ons."
         schema={itemListSchema}
         url="/shop/categories"

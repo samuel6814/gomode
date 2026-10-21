@@ -522,7 +522,7 @@ const ProfileSettings = () => {
             </Switch>
             <ToggleInfo>
               <h4>DROP NOTIFICATIONS</h4>
-              <p>Instant SMS/Email alerts when new footwear designs drop.</p>
+              <p>Instant SMS/Email alerts when new apparel collections drop.</p>
             </ToggleInfo>
           </ToggleRow>
 
@@ -532,8 +532,8 @@ const ProfileSettings = () => {
               <span></span>
             </Switch>
             <ToggleInfo>
-              <h4>SNEAKER GARDEN JOURNAL</h4>
-              <p>Monthly curated editorial features on Ghanaian streetwear & footwear design.</p>
+              <h4>GOMODE JOURNAL</h4>
+              <p>Monthly curated editorial features on modern streetwear & apparel design.</p>
             </ToggleInfo>
           </ToggleRow>
         </TogglesGrid>

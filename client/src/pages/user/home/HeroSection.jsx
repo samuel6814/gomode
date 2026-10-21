@@ -1,20 +1,22 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, ShieldCheck } from 'lucide-react';
 import {
   NAVY_ACCENT,
   INK,
   MUTED,
   CANVAS,
   WHITE,
+  LINE,
   FONT_HERO,
 } from '../../../theme/brand';
+import { media } from '../../../theme/breakpoints';
 
-const fadeIn = keyframes`
+const slideUp = keyframes`
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(28px);
   }
   to {
     opacity: 1;
@@ -22,269 +24,168 @@ const fadeIn = keyframes`
   }
 `;
 
-const SectionWrapper = styled.section`
-  position: relative;
-  width: 100%;
-  min-height: calc(100vh - 88px);
-  min-height: calc(100dvh - 88px);
-  background: ${CANVAS};
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  overflow: hidden;
-  padding: 0;
-`;
-
-const Stage = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 1600px;
-  height: calc(100vh - 92px);
-  min-height: 560px;
-  max-height: 900px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  overflow: hidden;
-
-  @media (max-width: 768px) {
-    height: auto;
-    min-height: calc(100svh - 80px);
-    overflow: visible;
+const pulse = keyframes`
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
   }
 `;
 
-/**
- * Layer 1: Giant Background Typography
- * "STYLE" on line 1: refined, italic, bold (weight: 700)
- * "GHANA" on line 2: italic, bold and strong/heavy (weight: 900)
- * Positioned in the upper/middle backdrop so the shoe rises up in front of it
- */
-const TypographyBackground = styled.div`
-  position: absolute;
-  top: 6%;
-  left: 0;
-  right: 0;
+const HeroWrapper = styled.section`
+  position: relative;
   width: 100%;
+  background: ${CANVAS};
+  border-bottom: 1px solid ${LINE};
+  overflow: hidden;
+  padding: 3rem 1.25rem 3.5rem;
+
+  @media ${media.tabletUp} {
+    padding: 4.5rem 2.5rem 4.5rem;
+  }
+
+  @media ${media.desktop} {
+    padding: 5.5rem 3.5rem 5rem;
+  }
+`;
+
+const Container = styled.div`
+  max-width: 1560px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  gap: 3.5rem;
+`;
+
+const TopMetaRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  z-index: 1;
-  pointer-events: none;
-  user-select: none;
-  opacity: 1;
-  animation: ${fadeIn} 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    opacity: 1;
-  }
-
-  @media (min-width: 1024px) {
-    top: 6%;
-  }
-
-  @media (max-width: 768px) {
-    top: clamp(0.5rem, 2vh, 1.5rem);
-  }
-
-  @media (max-width: 480px) {
-    top: clamp(0.25rem, 1.5vh, 1rem);
-  }
-`;
-
-const HeroH1 = styled.h1`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-`;
-
-const FreshWord = styled.span`
-  font-family: ${FONT_HERO};
-  font-weight: 800;
-  font-size: clamp(3.2rem, 9.5vw, 8.5rem);
-  line-height: 0.88;
-  letter-spacing: -0.03em;
-  color: ${INK};
-  text-align: center;
-  text-transform: uppercase;
-  opacity: 0.95;
-  display: block;
-  width: 100%;
-
-  @media (max-width: 600px) {
-    font-size: clamp(2.8rem, 13vw, 4.4rem);
-  }
-`;
-
-const KicksWord = styled.span`
-  font-family: ${FONT_HERO};
-  font-weight: 900;
-  font-size: clamp(3.8rem, 11.5vw, 10.5rem);
-  line-height: 0.88;
-  letter-spacing: -0.035em;
-  color: #668A53;
-  text-align: center;
-  text-transform: uppercase;
-  text-shadow: 0 4px 28px rgba(102, 138, 83, 0.28);
-  display: block;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    text-shadow: none;
-    font-size: clamp(3.4rem, 16vw, 5.2rem);
-  }
-`;
-
-/**
- * Layer 2: Foreground Hero Asset (bg-hero.png)
- * Reliably centered across the entire stage (left: 0, right: 0, margin: 0 auto),
- * grounded at bottom: 0, and sized comfortably
- */
-const HeroImageWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 2;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  pointer-events: none;
-  animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-
-  img {
-    display: block;
-    height: clamp(440px, 68vh, 760px);
-    max-width: min(95vw, 1100px);
-    width: auto;
-    object-fit: contain;
-    object-position: bottom center;
-    filter: drop-shadow(0 20px 42px rgba(17, 20, 24, 0.2));
-    margin: 0 auto;
-    transition: transform 0.4s ease;
-
-    @media (min-width: 1200px) {
-      height: clamp(480px, 72vh, 840px);
-      max-width: 1250px;
-    }
-
-    @media (max-width: 768px) {
-      height: clamp(300px, 50vh, 460px);
-      max-width: 96vw;
-      filter: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    position: relative;
-    bottom: auto;
-    margin-top: clamp(2.5rem, 6vh, 4rem);
-    margin-bottom: 0.25rem;
-  }
-`;
-
-/**
- * Layer 3: Editorial Flanks
- * Left: "DESIGN THAT ENDURES" + "SHOP NOW" CTA
- * Right: "COLLECTION NO. 1" + "EST. 2024"
- * Positioned cleanly above the bottom edge so it never overlaps the shoe image
- */
-const EditorialBottomBar = styled.div`
-  position: absolute;
-  bottom: clamp(5.5rem, 11vh, 8.5rem);
-  left: 2rem;
-  right: 2rem;
-  z-index: 3;
-  display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  pointer-events: none;
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid ${LINE};
+  animation: ${slideUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+`;
 
-  @media (min-width: 1024px) {
-    bottom: clamp(6.5rem, 13.5vh, 9.5rem);
-    left: 4.5rem;
-    right: 4.5rem;
-  }
+const LiveBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: ${INK};
 
-  @media (min-width: 1400px) {
-    left: 6rem;
-    right: 6rem;
-  }
-
-  @media (max-width: 768px) {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    right: auto;
-    width: 100%;
-    padding: 0.5rem 1.5rem 2.5rem;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
-    text-align: center;
-    z-index: 5;
-    background: transparent;
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: ${NAVY_ACCENT};
+    box-shadow: 0 0 10px rgba(102, 138, 83, 0.65);
+    animation: ${pulse} 2s infinite ease-in-out;
   }
 `;
 
-const EditorialLeft = styled.div`
+const EditionTag = styled.div`
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: ${MUTED};
+`;
+
+const MainGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: end;
+
+  @media ${media.desktop} {
+    grid-template-columns: 1.35fr 0.85fr;
+    gap: 4rem;
+  }
+`;
+
+const TitleColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  pointer-events: auto;
-  animation: ${fadeIn} 0.8s ease 0.25s both;
-
-  @media (max-width: 768px) {
-    align-items: center;
-  }
+  animation: ${slideUp} 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 `;
 
-const Subtitle = styled.h2`
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  line-height: 1.45;
+const SubtitleTag = styled.span`
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: ${NAVY_ACCENT};
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const DisplayHeading = styled.h1`
+  font-family: ${FONT_HERO};
+  font-size: clamp(2.8rem, 8.8vw, 7.8rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
   color: ${INK};
   text-transform: uppercase;
   margin: 0;
 
-  @media (min-width: 1024px) {
-    font-size: 0.9375rem;
-    letter-spacing: 0.18em;
+  .accent-line {
+    color: ${NAVY_ACCENT};
+    display: block;
+    text-shadow: 0 4px 30px rgba(102, 138, 83, 0.18);
+  }
+
+  .italic-sub {
+    font-style: italic;
+    font-weight: 800;
+    letter-spacing: -0.05em;
   }
 `;
 
-const ShopNowButton = styled(Link)`
+const NarrativeText = styled.p`
+  font-size: clamp(0.9375rem, 1.25vw, 1.1875rem);
+  line-height: 1.6;
+  color: #3b424a;
+  max-width: 640px;
+  margin: 0.5rem 0 1rem;
+`;
+
+const ActionButtonGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+`;
+
+const PrimaryCta = styled(Link)`
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   background: ${INK};
   color: ${WHITE};
-  font-size: 0.78125rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.95rem 2.2rem;
+  padding: 1.15rem 2.6rem;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px rgba(17, 20, 24, 0.15);
+  box-shadow: 0 6px 18px rgba(17, 20, 24, 0.16);
 
   &:hover {
     background: ${NAVY_ACCENT};
-    box-shadow: 0 6px 20px rgba(102, 138, 83, 0.35);
+    box-shadow: 0 8px 26px rgba(102, 138, 83, 0.35);
     transform: translateY(-2px);
   }
 
@@ -293,95 +194,260 @@ const ShopNowButton = styled(Link)`
   }
 `;
 
-const EditorialRight = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1.75rem;
-  text-align: right;
-  pointer-events: auto;
-  animation: ${fadeIn} 0.8s ease 0.3s both;
-
-  @media (max-width: 768px) {
-    align-items: center;
-    text-align: center;
-    gap: 0.75rem;
-  }
-`;
-
-const CollectionMeta = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-
-  .meta-title {
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    color: ${INK};
-    text-transform: uppercase;
-  }
-
-  .meta-sub {
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    color: ${INK};
-    text-transform: uppercase;
-  }
-`;
-
-const EstablishedMeta = styled.span`
+const SecondaryCta = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: ${INK};
   font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  color: ${MUTED};
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  text-decoration: none;
+  padding: 1.15rem 2rem;
+  border: 1px solid ${INK};
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: ${NAVY_ACCENT};
+    color: ${NAVY_ACCENT};
+    background: rgba(102, 138, 83, 0.05);
+    transform: translateY(-2px);
+  }
+`;
+
+const FeatureColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: ${slideUp} 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+`;
+
+const CategorySnippetCard = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: #EBE8E1;
+  border: 1px solid ${LINE};
+  text-decoration: none;
+  color: ${INK};
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .tag-num {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: ${NAVY_ACCENT};
+  }
+
+  .tag-title {
+    font-family: ${FONT_HERO};
+    font-size: 0.9375rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0 0 0.15rem;
+  }
+
+  .tag-desc {
+    font-size: 0.75rem;
+    color: #555e6b;
+    margin: 0;
+  }
+
+  .arrow-box {
+    width: 32px;
+    height: 32px;
+    border: 1px solid ${LINE};
+    background: ${WHITE};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${INK};
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    border-color: ${NAVY_ACCENT};
+    background: ${WHITE};
+    transform: translateX(4px);
+    box-shadow: 0 8px 20px rgba(17, 20, 24, 0.06);
+
+    .arrow-box {
+      background: ${NAVY_ACCENT};
+      color: ${WHITE};
+      border-color: ${NAVY_ACCENT};
+    }
+  }
+`;
+
+const HeroSpecsBar = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid ${LINE};
+
+  @media ${media.tabletUp} {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+`;
+
+const SpecItem = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  .spec-icon {
+    color: ${NAVY_ACCENT};
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .spec-label {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: ${INK};
+    margin: 0 0 0.2rem;
+  }
+
+  .spec-sub {
+    font-size: 0.75rem;
+    color: ${MUTED};
+    margin: 0;
+    line-height: 1.4;
+  }
 `;
 
 const HeroSection = () => {
   return (
-    <SectionWrapper>
-      <Stage>
-        {/* Layer 1: Background Typography ("fresh kicks") */}
-        <TypographyBackground>
-          <HeroH1>
-            <FreshWord>fresh</FreshWord>
-            <KicksWord>kicks</KicksWord>
-          </HeroH1>
-        </TypographyBackground>
+    <HeroWrapper>
+      <Container>
+        {/* Top Ticker / Status Bar */}
+        <TopMetaRow>
+          <LiveBadge>
+            <span className="pulse-dot" />
+            <span>GoMode Studio // Release 01 Live</span>
+          </LiveBadge>
+          <EditionTag>
+            Strict Small-Batch Archive • 15 Curated Pieces
+          </EditionTag>
+        </TopMetaRow>
 
-        {/* Layer 2: Centerpiece Shoe Asset - Grounded at the bottom, bigger and prominent */}
-        <HeroImageWrapper>
-          <img
-            src="/sneaker-garden-bg.png"
-            alt="GoMode - Fresh Kicks"
-          />
-        </HeroImageWrapper>
+        {/* Main Content Grid */}
+        <MainGrid>
+          <TitleColumn>
+            <SubtitleTag>
+              <Sparkles size={14} />
+              <span>Uncompromising Modern Apparel</span>
+            </SubtitleTag>
 
-        {/* Layer 3: Editorial Flanks at the Bottom */}
-        <EditorialBottomBar>
-          <EditorialLeft>
-            <Subtitle>
-              DESIGN<br />
-              THAT ENDURES
-            </Subtitle>
-            <ShopNowButton to="/shop">
-              <span>SHOP NOW</span>
-              <ArrowRight size={14} />
-            </ShopNowButton>
-          </EditorialLeft>
+            <DisplayHeading>
+              OWN YOUR
+              <span className="accent-line">MODE.</span>
+            </DisplayHeading>
 
-          <EditorialRight>
-            <CollectionMeta>
-              <span className="meta-title">COLLECTION</span>
-              <span className="meta-sub">NO. 1</span>
-            </CollectionMeta>
-            <EstablishedMeta>EST. 2024</EstablishedMeta>
-          </EditorialRight>
-        </EditorialBottomBar>
-      </Stage>
-    </SectionWrapper>
+            <NarrativeText>
+              Engineered corduroy overshirts, heavyweight relaxed denim, tactile wool-blend polos, and structured aviator outerwear. Designed for deliberate movement and timeless presence.
+            </NarrativeText>
+
+            <ActionButtonGroup>
+              <PrimaryCta to="/shop">
+                <span>Explore The Archive</span>
+                <ArrowRight size={15} />
+              </PrimaryCta>
+              <SecondaryCta to="/shop?category=Outerwear%20%26%20Jackets">
+                <span>Outerwear & Denim</span>
+              </SecondaryCta>
+            </ActionButtonGroup>
+          </TitleColumn>
+
+          <FeatureColumn>
+            <CategorySnippetCard to="/shop?category=Outerwear%20%26%20Jackets">
+              <div>
+                <span className="tag-num">01 / DROP</span>
+                <h4 className="tag-title">Outerwear & Leather</h4>
+                <p className="tag-desc">Classic Shearling Aviator & Heavy Layers</p>
+              </div>
+              <div className="arrow-box">
+                <ArrowRight size={14} />
+              </div>
+            </CategorySnippetCard>
+
+            <CategorySnippetCard to="/shop?category=Denim%20%26%20Jeans">
+              <div>
+                <span className="tag-num">02 / DENIM</span>
+                <h4 className="tag-title">90s Loose & Relaxed</h4>
+                <p className="tag-desc">Rigid Light Wash & Overdyed Jet Black</p>
+              </div>
+              <div className="arrow-box">
+                <ArrowRight size={14} />
+              </div>
+            </CategorySnippetCard>
+
+            <CategorySnippetCard to="/shop?category=Sweaters%20%26%20Knits">
+              <div>
+                <span className="tag-num">03 / KNIT</span>
+                <h4 className="tag-title">Tactile Knits & Polos</h4>
+                <p className="tag-desc">Textured Wool Blends & Argyle Cardigans</p>
+              </div>
+              <div className="arrow-box">
+                <ArrowRight size={14} />
+              </div>
+            </CategorySnippetCard>
+
+            <CategorySnippetCard to="/shop?category=Bags%20%26%20Accessories">
+              <div>
+                <span className="tag-num">04 / CARRY</span>
+                <h4 className="tag-title">Bags & Everyday Goods</h4>
+                <p className="tag-desc">Canvas Commuters & Embossed Belts</p>
+              </div>
+              <div className="arrow-box">
+                <ArrowRight size={14} />
+              </div>
+            </CategorySnippetCard>
+          </FeatureColumn>
+        </MainGrid>
+
+        {/* Specs & Assurance Bar */}
+        <HeroSpecsBar>
+          <SpecItem>
+            <div className="spec-icon">
+              <Layers size={18} />
+            </div>
+            <div>
+              <h5 className="spec-label">Artisanal Curation</h5>
+              <p className="spec-sub">Eco-friendly TENCEL™, rigid denim, and wool blends.</p>
+            </div>
+          </SpecItem>
+
+          <SpecItem>
+            <div className="spec-icon">
+              <ShieldCheck size={18} />
+            </div>
+            <div>
+              <h5 className="spec-label">Verified Sizing & Fit</h5>
+              <p className="spec-sub">Complimentary size exchanges across Greater Accra.</p>
+            </div>
+          </SpecItem>
+
+          <SpecItem>
+            <div className="spec-icon">
+              <Sparkles size={18} />
+            </div>
+            <div>
+              <h5 className="spec-label">Nationwide Fulfillment</h5>
+              <p className="spec-sub">Same-day dispatch and door-to-door delivery in Ghana.</p>
+            </div>
+          </SpecItem>
+        </HeroSpecsBar>
+      </Container>
+    </HeroWrapper>
   );
 };
 

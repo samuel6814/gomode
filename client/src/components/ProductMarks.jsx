@@ -33,8 +33,8 @@ export const BrandMark = styled.span`
 `;
 
 export function BuyyTag({ product }) {
-  if (!product?.tags?.includes('buyy') && !product?.tags?.includes('styleghana') && !product?.tags?.includes('sneakergarden') && !product?.tags?.includes('official')) return null;
-  return <BrandMark>SNEAKER GARDEN</BrandMark>;
+  if (!product?.tags?.includes('gomode') && !product?.tags?.includes('buyy') && !product?.tags?.includes('styleghana') && !product?.tags?.includes('sneakergarden') && !product?.tags?.includes('official')) return null;
+  return <BrandMark>GOMODE</BrandMark>;
 }
 
 export function CjTag() {

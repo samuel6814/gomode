@@ -1,6 +1,6 @@
-# buyy storefront
+# GoMode Storefront
 
-The shop and the admin UI. Vite serves this app on port 5173 and talks to the API in `../server`.
+The storefront and admin UI. Vite serves this app on port 5173 and communicates with the backend API in `../server`.
 
 <p>
   <img src="https://img.shields.io/badge/React-18-black?logo=react&logoColor=white" alt="React 18" />
@@ -13,11 +13,11 @@ The shop and the admin UI. Vite serves this app on port 5173 and talks to the AP
 ## Stack
 
 - React 18 and Vite 7
-- styled-components for layout. Corners are square. Type is Inter, with Archivo Black for the wordmark.
+- styled-components for layout, with `#668A53` accent and `#F5F3EF` stone canvas.
 - React Router 7
-- TanStack Query and axios for the API
+- TanStack Query v5 and Axios for API communications
 - Paystack inline on checkout
-- Better Auth client for sign-in
+- Better Auth client for authentication
 
 ## Scripts
 
@@ -28,7 +28,7 @@ npm run build
 npm run preview
 ```
 
-Open the dev shop at `http://localhost:5173`. The API allows that origin in development. `http://127.0.0.1:5173` is blocked by CORS, so the homepage looks empty even when the API is up.
+Open the storefront at `http://localhost:5173`.
 
 ## Environment
 
@@ -41,20 +41,16 @@ Copy `.env.example` to `.env`.
 
 ## Pages
 
-The public shell (`StoreShell`) wraps the shop. Auth screens and the admin layout sit outside it.
+The public shell (`StoreShell`) wraps the shop with the text-based `gomode` logo.
 
-| Path | Who |
-| --- | --- |
-| `/` | Homepage: wordmark, search, categories, sale banner, rails, Knits bento |
-| `/shop`, `/product/:id` | Catalog grid and product page |
-| `/cart`, `/checkout` | Bag and Paystack checkout, including guests |
-| `/order-confirmation/:id` | Confirmation after payment |
-| `/track` | Order number plus email |
-| `/wishlist`, `/profile`, `/orders` | Signed-in account |
-| `/admin/sales` and the other `/admin/*` screens | Admin only |
+| Path | Who | Description |
+| --- | --- | --- |
+| `/` | Public | Homepage: bold typographic hero, live ticker, categories, archive |
+| `/shop`, `/product/:id` | Public | Apparel catalog grid and product details |
+| `/cart`, `/checkout` | Public | Bag and Paystack checkout, supporting guests and registered users |
+| `/order-confirmation/:id` | Public | Confirmation after payment |
+| `/track` | Public | Real-time order tracking with status timeline |
+| `/wishlist`, `/profile`, `/orders` | Users | Signed-in account center |
+| `/admin/*` | Admin | Comprehensive dashboard, inventory, orders, flash sales |
 
-The cart drawer opens from the rail, the mobile menu, and the bag button on the right. **View full bag** goes to `/cart`. **Checkout** goes to `/checkout`.
-
-Guest bag data lives in `localStorage` under `buyy-guest-cart`. Signing in merges it into the account cart.
-
-Catalog photos are static files in `public/new-items/`. The API stores the public path.
+Catalog photos are static files in `public/new-items/` with Cloudinary support.

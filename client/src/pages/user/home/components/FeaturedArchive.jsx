@@ -316,7 +316,7 @@ const ViewFullShopBtn = styled(Link)`
   }
 `;
 
-const TABS = ['All Pieces', 'Sneakers', 'Clogs & Slip-Ons', 'Sandals', 'Slip-Ons & Flats'];
+const TABS = ['All Pieces', 'Outerwear & Jackets', 'Denim & Jeans', 'Sweaters & Knits', 'Shirts', 'Bags & Accessories'];
 
 const FeaturedArchive = ({ products = [] }) => {
   const [selectedTab, setSelectedTab] = useState('All Pieces');
@@ -349,7 +349,7 @@ const FeaturedArchive = ({ products = [] }) => {
       <SectionHeader>
         <TitleCol>
           <span className="eyebrow">Collection No. 1</span>
-          <h2>The Footwear Archive</h2>
+          <h2>The GoMode Archive</h2>
         </TitleCol>
 
         <FilterTabs>
@@ -368,15 +368,20 @@ const FeaturedArchive = ({ products = [] }) => {
 
       <ProductGrid>
         {filteredProducts.slice(0, 8).map((product) => {
-          const imgUrl = product.images?.[0]?.image?.url || '/sneaker-garden-bg.png';
+          const imgUrl = product.images?.[0]?.image?.url || '/gomode.jpeg';
           const isAdded = addedIds[product.id] === 'done';
           const isLoading = addedIds[product.id] === 'loading';
+
+          const sizeTags = (product.tags || [])
+            .filter((t) => t.startsWith('Size '))
+            .map((t) => t.replace('Size ', ''));
+          const sizeDisplay = sizeTags.length > 0 ? sizeTags.slice(0, 4).join(' • ') : 'Curated Fit';
 
           return (
             <Card key={product.id}>
               <ImageContainer to={`/product/${product.id}`}>
                 <BadgeRow>
-                  <span className="category-pill">{product.category?.name || 'Footwear'}</span>
+                  <span className="category-pill">{product.category?.name || 'Apparel'}</span>
                   {product.brand && <span className="brand-pill">{product.brand}</span>}
                 </BadgeRow>
                 <img src={imgUrl} alt={product.name} className="product-thumb" />
@@ -391,7 +396,7 @@ const FeaturedArchive = ({ products = [] }) => {
                 </MetaTop>
 
                 <ActionRow>
-                  <SizesPill>Sizes EU 38–45</SizesPill>
+                  <SizesPill>{sizeDisplay}</SizesPill>
                   <QuickAddButton
                     type="button"
                     $added={isAdded}

@@ -426,8 +426,8 @@ const CartPage = () => {
     <PageWrapper>
       <Container>
         <PageHeader>
-          <span>SNEAKER GARDEN BAG</span>
-          <h1>Your Footwear Selection</h1>
+          <span>GOMODE BAG</span>
+          <h1>Your Selected Pieces</h1>
         </PageHeader>
 
         <MainContent>

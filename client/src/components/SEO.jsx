@@ -4,10 +4,10 @@ import { SITE_URL, CLIENT_TAGLINE, BRAND_NAME } from '../theme/brand';
 
 const SEO = ({ title, description, schema, url, image }) => {
   const siteName = BRAND_NAME;
-  const defaultTitle = `${BRAND_NAME} | Curated Streetwear & Footwear`;
-  const defaultDescription = CLIENT_TAGLINE || 'Timeless footwear and contemporary streetwear curated in Accra, Ghana.';
+  const defaultTitle = `${BRAND_NAME} | Modern Apparel & Elevated Essentials`;
+  const defaultDescription = CLIENT_TAGLINE || 'Uncompromising modern apparel, premium denim, and elevated knitwear.';
   const defaultUrl = SITE_URL;
-  const defaultImage = `${defaultUrl}/logo-nobg.png`;
+  const defaultImage = `${defaultUrl}/gomode.jpeg`;
 
   const metaTitle = title ? `${title} | ${siteName}` : defaultTitle;
   const metaDescription = description || defaultDescription;

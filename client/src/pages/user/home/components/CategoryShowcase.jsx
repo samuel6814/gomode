@@ -206,31 +206,31 @@ const CardBottom = styled.div`
 const CATEGORIES = [
   {
     num: '01',
-    name: 'Sneakers',
-    sub: 'Streetwear & Performance Icons',
-    href: '/shop?category=Sneakers',
-    image: '/items/shoe111.jpg',
+    name: 'Outerwear',
+    sub: 'Aviator Bombers & Heavyweight Layers',
+    href: '/shop?category=Outerwear%20%26%20Jackets',
+    image: '/new-items/Bomber jacket.avif',
   },
   {
     num: '02',
-    name: 'Clogs & Slip-Ons',
-    sub: 'Anatomical Suede Loungewear',
-    href: '/shop?category=Clogs%20%26%20Slip-Ons',
-    image: '/items/shoe107.jpg',
+    name: 'Denim & Jeans',
+    sub: '90s Loose, Relaxed & Baggy Cuts',
+    href: '/shop?category=Denim%20%26%20Jeans',
+    image: '/new-items/JJICHRIS JJORIGINAL SQ 071 Relaxed Fit Jeans.avif',
   },
   {
     num: '03',
-    name: 'Sandals',
-    sub: 'Ergonomic Cork-Latex Straps',
-    href: '/shop?category=Sandals',
-    image: '/items/shoe103.jpg',
+    name: 'Knitwear & Polos',
+    sub: 'Textured Wool Polos & Argyle Knits',
+    href: '/shop?category=Sweaters%20%26%20Knits',
+    image: '/new-items/Plain Knitted poloPlain Knitted polo.avif',
   },
   {
     num: '04',
-    name: 'Slip-Ons & Flats',
-    sub: 'Ballet Silhouettes & Casual Mesh',
-    href: '/shop?category=Slip-Ons%20%26%20Flats',
-    image: '/items/shoe12.jpg',
+    name: 'Accessories & Carry',
+    sub: 'Canvas Commuters, Belts & Beanies',
+    href: '/shop?category=Bags%20%26%20Accessories',
+    image: '/new-items/jackjones-jacpascalbackpackln-black.avif',
   },
 ];
 
@@ -243,7 +243,7 @@ const CategoryShowcase = () => {
           <h2>Explore by Category</h2>
         </TitleBlock>
         <ViewAllLink to="/shop">
-          <span>View All Footwear</span>
+          <span>View All Apparel</span>
           <ArrowUpRight size={16} />
         </ViewAllLink>
       </HeaderRow>

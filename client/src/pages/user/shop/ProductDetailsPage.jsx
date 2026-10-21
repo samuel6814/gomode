@@ -12,7 +12,7 @@ import Suggestions from '../../../components/Suggestions';
 import { ProductSkeleton, TextStackSkeleton } from '../../../components/ui/Skeleton';
 import SEO from '../../../components/SEO';
 import { media } from '../../../theme/breakpoints';
-import { CANVAS, NAVY_ACCENT, INK, LINE, FONT_HERO } from '../../../theme/brand';
+import { CANVAS, NAVY_ACCENT, INK, LINE, FONT_HERO, SITE_URL } from '../../../theme/brand';
 
 const PageWrapper = styled.div`
   background: ${CANVAS};
@@ -536,7 +536,7 @@ const ProductDetailPage = () => {
     },
     offers: {
       '@type': 'Offer',
-      url: `https://sneakergarden.com/product/${product.id}`,
+      url: `${SITE_URL}/product/${product.id}`,
       priceCurrency: 'GHS',
       price: saleUnitPrice(product, sale),
       availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
@@ -544,7 +544,7 @@ const ProductDetailPage = () => {
     },
   };
 
-  const dynamicDescription = `Discover the ${product.name} at GoMode. ${product.description.substring(0, 120)}... Handcrafted luxury footwear with fast Ghana delivery.`;
+  const dynamicDescription = `Discover the ${product.name} at GoMode. ${product.description.substring(0, 120)}... Contemporary curated apparel with fast Ghana delivery.`;
 
   return (
     <>
