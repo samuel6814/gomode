@@ -1,0 +1,368 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// USER MODEL ---
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  passwordHash  String?   
+  emailVerified Boolean   @default(false) 
+  image         String?   // 🚨 CRITICAL FIX: Google Auth needs this!
+  role          String    @default("CUSTOMER")
+
+  // Logistical Info
+  phone         String?
+  street        String?
+  city          String?
+  region        String?
+  zipCode       String?
+  country       String?
+  
+  orders        Order[]
+  wishlists     Wishlist[]
+  cart          Cart?     
+  
+  sessions      Session[]
+  accounts      Account[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime? // 🚨 Restored for better-auth compatibility
+  refreshTokenExpiresAt DateTime? // 🚨 Restored for better-auth compatibility
+  scope                 String?   // 🚨 Restored for better-auth compatibility
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ---- CART SYSTEM ----
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id          String     @id @default(uuid())
+  cartId      String
+  cart        Cart       @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  lineKey     String
+  productId   String?
+  product     Product?   @relation(fields: [productId], references: [id])
+  cjVariantId String?
+  cjVariant   CjVariant? @relation(fields: [cjVariantId], references: [id])
+  source      String     @default("buyy")
+  quantity    Int        @default(1)
+
+  @@unique([cartId, lineKey])
+  @@index([cartId])
+}
+
+// ---- DYNAMIC STOREFRONT CONFIG ----
+model StoreConfig {
+  id        String   @id @default(uuid())
+  key       String   @unique // e.g., "HERO_SECTION"
+  value     String   // JSON stringified data
+  updatedAt DateTime @updatedAt
+}
+
+// ---- IMAGE LIBRARY & PRODUCTS ----
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  public_id String   @unique
+  filename  String?
+  format    String?
+  size      Int?
+  tags      String?
+  
+  products  ProductImage[]
+  
+  createdAt DateTime @default(now())
+  
+  @@index([tags]) // Speeds up media library filtering
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  stock       Int      @default(0)
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  
+  tags        String[] @default([])
+  colors      String[] @default([])
+  views       Int      @default(0)
+  
+  wishlistedBy Wishlist[]
+  cartItems   CartItem[]
+  orderItems   OrderItem[]    
+  
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId]) // Speeds up category page loading
+  @@index([isActive])   // Crucial for storefront search
+  @@index([name])
+  @@index([createdAt])
+}
+
+model ProductImage {
+  productId   String
+  imageId     String
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  image       Image   @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  isPrimary   Boolean @default(false)
+
+  @@id([productId, imageId])
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?  // Added: Optional description (e.g., "APPAREL & TEXTILES")
+  image       String?  // Added: Optional image URL for the category thumbnail
+  status      String   @default("ACTIVE") // Added: "ACTIVE" or "HIDDEN"
+
+  products    Product[]
+}
+
+// ---- ADVANCED ORDER MANAGEMENT ----
+
+model Order {
+  id                 String   @id @default(uuid())
+  orderNumber        String   @unique
+  userId             String?
+  user               User?    @relation(fields: [userId], references: [id])
+  status             String   @default("PENDING") // PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  isNotificationRead Boolean  @default(false)
+  totalAmount        Float
+  
+  // Payment tracking
+  transactionRef     String?  @unique
+  paymentMethod      String?  
+  paymentStatus      String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  cjOrderId          String?
+  cjStatus           String   @default("")
+  logisticName       String?
+  trackingNumber     String?
+  trackingUrl        String?
+  trackingEmailed    Boolean  @default(false)
+  
+  // New Relations for the advanced UI
+  items              OrderItem[]
+  shippingAddress    ShippingAddress? 
+  isArchived         Boolean     @default(false)  
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt // Added this so we can track timeline changes!
+
+  @@index([userId])
+  @@index([status])
+  @@index([isArchived])
+  @@index([isNotificationRead])
+  @@index([createdAt])
+}
+
+model PendingPayment {
+  id        String   @id @default(uuid())
+  reference String   @unique
+  email     String
+  userId    String?
+  amount    Float
+  payload   String
+  createdAt DateTime @default(now())
+}
+
+// The "Receipt" - Saves exact details at checkout so history doesn't change
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId   String?
+  product     Product?   @relation(fields: [productId], references: [id])
+  cjVariantId String?
+  cjVariant   CjVariant? @relation(fields: [cjVariantId], references: [id])
+  source      String     @default("buyy")
+  vid         String?
+  
+  // SNAPSHOT DATA: We save these here so if you change a product's price 
+  // or name next year, your old order receipts don't suddenly change!
+  productName String  
+  price       Float   
+  quantity    Int     @default(1)
+  attributes  String? // For saving "SIZE: 48 / MIDNIGHT BLUE"
+
+  @@index([orderId])
+}
+
+model ShippingAddress {
+  id        String  @id @default(uuid())
+  orderId   String  @unique // 1-to-1 relation with Order
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  name      String  // e.g., "Julian Casablancas"
+  email     String  // e.g., "julian.c@thestrokes.com"
+  phone     String? // e.g., "+1 (212) 555-0198"
+  street    String
+  city      String
+  region    String  // State or Province
+  country   String
+  zipCode   String?
+}
+
+// --- PHASE 3 MODELS ---
+
+// 1. Wishlist (Connects a User to a Product)
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // A user can only wishlist a specific product once
+  @@unique([userId, productId]) 
+  @@index([userId])
+}
+
+// 2. Newsletter Subscribers
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// 3. Contact Us Messages
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    String   @default("UNREAD") // Can be UNREAD, READ, or REPLIED
+  createdAt DateTime @default(now())
+}
+
+// 4. Delivery Fees
+model DeliveryFee {
+  id        String   @id @default(uuid())
+  region    String
+  city      String?  // If null, this is the general fee for the whole region
+  fee       Float
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([region, city])
+}
+
+// ---- CJ DROPSHIPPING (separate from the buyy catalog) ----
+model CjAuth {
+  id                     String   @id @default("default")
+  accessToken            String
+  refreshToken           String
+  accessTokenExpiryDate  DateTime
+  refreshTokenExpiryDate DateTime
+  openId                 String
+  updatedAt              DateTime @updatedAt
+}
+
+model CjProduct {
+  id           String      @id @default(uuid())
+  pid          String      @unique
+  name         String
+  description  String      @default("")
+  price        Float       @default(0)
+  currency     String      @default("USD")
+  imageUrl     String      @default("")
+  categoryName String      @default("")
+  stock        Int         @default(0)
+  tags         String[]    @default(["cj"])
+  isActive     Boolean     @default(true)
+  variants     CjVariant[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([isActive])
+}
+
+model CjVariant {
+  id          String    @id @default(uuid())
+  productId   String
+  product     CjProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  vid         String
+  sku         String    @default("")
+  price       Float     @default(0)
+  optionLabel String    @default("")
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+
+  @@unique([productId, vid])
+}
+
+// 5. Caching for Admin Dashboard
+model DashboardStats {
+  id                String   @id @default("singleton")
+  totalRevenue      Float    @default(0)
+  validOrdersCount  Int      @default(0)
+  activeFulfillment Int      @default(0)
+  completedOrders   Int      @default(0)
+  totalCount        Int      @default(0)
+  updatedAt         DateTime @updatedAt
+}

@@ -1,0 +1,124 @@
+# =====================================================================
+PRODUCT CATALOG DATA
+
+IDENTIFIER: regular fit shirt.avif
+NAME: Regular Fit Corduroy Long-Sleeve Shirt
+DESCRIPTION: A versatile, classic regular fit shirt crafted from soft, durable corduroy. Perfect for layering over a tee or wearing buttoned up during cooler months. Features a standard collar, button-up front, and a single chest patch pocket.
+AVAILABLE COLORS: Olive Green (pictured), Navy Blue, Camel, Burgundy
+AVAILABLE SIZES: S, M, L, XL, XXL
+CATEGORY: Shirts / Casual
+PRICE: $45.00
+
+IDENTIFIER: Plain Knitted poloPlain Knitted polo.avif
+NAME: Textured Wool-Blend Knitted Polo Sweater
+DESCRIPTION: Elevate your smart-casual wardrobe with this long-sleeve knitted polo. Made from a cozy, textured wool-blend, it features a classic spread collar with a neat 3-button placket and ribbed cuffs and hem for a perfect fit.
+AVAILABLE COLORS: Heather Brown (pictured), Charcoal Grey, Navy, Oatmeal
+AVAILABLE SIZES: XS, S, M, L, XL
+CATEGORY: Sweaters / Knits
+PRICE: $60.00
+
+IDENTIFIER: Plain Knitted polo.avif
+NAME: Argyle Pattern Knit Cardigan Polo
+DESCRIPTION: Make a bold statement with this striking argyle pattern knit cardigan. Featuring a full button-down front, polo-style collar, and a comfortable relaxed fit. Ideal for adding a touch of retro sophistication to any outfit.
+AVAILABLE COLORS: Camel/Black Argyle (pictured), Grey/Navy Argyle
+AVAILABLE SIZES: S, M, L, XL
+CATEGORY: Cardigans / Sweaters
+PRICE: $65.00
+
+IDENTIFIER: Perry-Ellis-mens-Textured-Polo-Sweater-Cabernet.webp
+NAME: Perry Ellis Men's Textured Short-Sleeve Polo Sweater
+DESCRIPTION: A sophisticated short-sleeve polo sweater featuring a subtle geometric textured knit pattern. The rich coloring and premium stretch fabric make it ideal for transitioning seamlessly from the office to the weekend.
+AVAILABLE COLORS: Cabernet (pictured), Midnight Blue, Forest Green, Slate Grey
+AVAILABLE SIZES: S, M, L, XL, XXL
+CATEGORY: Polos / Knits
+PRICE: $55.00
+
+IDENTIFIER: Perry-Ellis-mens-Slim-Fit-TENCEL-5-Pocket-Pant-Dark-Sapphire_7153fd2f.webp
+NAME: Perry Ellis Men's Slim Fit TENCEL™ 5-Pocket Pant
+DESCRIPTION: Sleek, lightweight, and exceptionally comfortable, these slim-fit 5-pocket pants are crafted with an eco-friendly TENCEL™ blend fabric. They offer ultimate softness and slight stretch, serving as a modern, refined alternative to classic denim.
+AVAILABLE COLORS: Dark Sapphire (pictured), True Black, Khaki, Stone
+AVAILABLE SIZES (Waist/Inseam): 30x30, 32x30, 32x32, 34x32, 36x32, 38x34
+CATEGORY: Pants / Bottoms
+PRICE: $75.00
+
+IDENTIFIER: Perry-Ellis-mens-Gatsby-Dress-Shoe-Black_6ef83567.webp
+NAME: Perry Ellis Men's Gatsby Patent Dress Shoe
+DESCRIPTION: Step into elegance with the Gatsby Dress Shoe. Featuring a high-shine patent leather finish, classic lace-up closure, and a sleek oxford silhouette. The perfect finishing touch for formal events, galas, and weddings.
+AVAILABLE COLORS: Black Patent (pictured), Matte Black Leather
+AVAILABLE SIZES (US): 7, 8, 9, 9.5, 10, 10.5, 11, 12, 13
+CATEGORY: Footwear / Formal Shoes
+PRICE: $95.00
+
+IDENTIFIER: Perry-Ellis-mens-Cool-Interlock-Tee-Reef-Waters-PS.webp
+NAME: Perry Ellis Men's Cool Interlock Performance Tee
+DESCRIPTION: Upgrade your basics with this everyday t-shirt. The Cool Interlock Tee offers moisture-wicking properties and a smooth, soft finish. Cut for a modern fit that drapes perfectly and retains its shape wash after wash.
+AVAILABLE COLORS: Reef Waters Blue (pictured), Optic White, True Black, Heather Grey
+AVAILABLE SIZES: S, M, L, XL, XXL
+CATEGORY: T-Shirts / Basics
+PRICE: $30.00
+
+IDENTIFIER: JJIEDDIE JJBASIC SQ 738 NOOS Loose fit jeans.avif
+NAME: JJIEDDIE JJBASIC Loose Fit Light Wash Jeans
+DESCRIPTION: Channel a relaxed, 90s-inspired retro vibe with the JJIEDDIE loose fit jeans. Crafted from sturdy, non-stretch light-wash denim, featuring a classic 5-pocket design, standard rise, and a spacious, relaxed fit all the way through the leg.
+AVAILABLE COLORS: Light Blue Wash (pictured), Vintage Indigo, Bleached White
+AVAILABLE SIZES (Waist/Inseam): 28x30, 30x32, 32x32, 34x32, 36x34
+CATEGORY: Denim / Jeans
+PRICE: $50.00
+
+IDENTIFIER: JJICHRIS JJORIGINAL SQ 071 Relaxed Fit Jeans.avif
+NAME: JJICHRIS JJORIGINAL Relaxed Fit Everyday Jeans
+DESCRIPTION: The ultimate everyday denim. These relaxed fit jeans offer a comfortable mid-rise waist and a straight leg. Washed down to a versatile medium blue with subtle fading, providing a naturally lived-in look right out of the box.
+AVAILABLE COLORS: Medium Blue Wash (pictured), Dark Wash, Stone Wash
+AVAILABLE SIZES (Waist/Inseam): 30x30, 32x30, 32x32, 34x32, 36x32, 38x32
+CATEGORY: Denim / Jeans
+PRICE: $55.00
+
+IDENTIFIER: JJIALEX JJORIGINAL SBD 306 NOOS Baggy fit jeans.avif
+NAME: JJIALEX JJORIGINAL Baggy Fit Black Jeans
+DESCRIPTION: Embrace maximum comfort and contemporary street style with the JJIALEX baggy fit jeans. Featuring a slightly dropped crotch, a wide leg profile, and classic black denim construction that pairs effortlessly with chunky sneakers and knitwear.
+AVAILABLE COLORS: Black (pictured), Faded Black, Raw Indigo
+AVAILABLE SIZES (Waist/Inseam): 28x30, 30x30, 32x32, 34x32, 36x32
+CATEGORY: Denim / Jeans
+PRICE: $60.00
+
+# === NEW ADDITIONS ===
+
+IDENTIFIER: jackjones-jacpascalbackpackln-black.avif
+NAME: Jack & Jones Pascal Canvas Commuter Backpack
+DESCRIPTION: A durable, utilitarian-inspired black canvas backpack featuring contrasting faux-leather carrying handles and base trim. Designed with a roomy main compartment, a secure front zippered pouch, and adjustable straps for daily commuting or weekend getaways.
+AVAILABLE COLORS: Black (pictured), Olive Green, Navy Blue
+AVAILABLE SIZES: One Size
+CATEGORY: Accessories / Bags
+PRICE: $45.00
+
+IDENTIFIER: Bomber jacket.avif
+NAME: Classic Leather Aviator Bomber Jacket
+DESCRIPTION: Infuse your wardrobe with rugged edge. This premium faux-leather bomber jacket features a striking contrast faux-shearling collar, a smooth zip-up front, and ribbed hem and cuffs to keep the cold out and the style locked in.
+AVAILABLE COLORS: Black w/ Cream Collar (pictured), Brown w/ Cream Collar
+AVAILABLE SIZES: S, M, L, XL, XXL
+CATEGORY: Outerwear / Jackets
+PRICE: $110.00
+
+IDENTIFIER: belt.jpg
+NAME: Jack & Jones Embossed Leather Belt
+DESCRIPTION: A reliable, sturdy everyday belt crafted from textured faux-leather. It boasts an antique-finish silver-tone buckle and features a bold, debossed Jack & Jones logo text along the strap. Perfect for holding up your favorite relaxed or baggy denim.
+AVAILABLE COLORS: Black (pictured), Cognac Brown
+AVAILABLE SIZES (Waist): 30, 32, 34, 36, 38, 40, 42
+CATEGORY: Accessories / Belts
+PRICE: $25.00
+
+IDENTIFIER: Beanie.avif
+NAME: Classic Ribbed Knit Beanie
+DESCRIPTION: An essential cold-weather staple. This beanie is knit from a soft, warm acrylic blend with a classic ribbed texture and a versatile fold-over cuff. It pairs perfectly with heavy outerwear like sherpa fleeces and oversized coats. 
+AVAILABLE COLORS: Forest Green (pictured), Black, Charcoal Grey, Mustard Yellow
+AVAILABLE SIZES: One Size
+CATEGORY: Accessories / Hats
+PRICE: $18.00
+
+IDENTIFIER: backpack.avif
+NAME: Minimalist Faux-Leather City Backpack
+DESCRIPTION: Sleek and sophisticated, this minimalist backpack is constructed from smooth, rich brown faux-leather. It features clean lines, a discreet front slip pocket, a secure dual-zip main compartment, and lightly padded straps, making it an excellent choice for a modern smart-casual look.
+AVAILABLE COLORS: Brown (pictured), Black
+AVAILABLE SIZES: One Size
+CATEGORY: Accessories / Bags
+PRICE: $65.00

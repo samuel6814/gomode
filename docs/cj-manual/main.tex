@@ -1,0 +1,308 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+\setlist[itemize]{topsep=0.3em,itemsep=0.2em}
+\setlist[enumerate]{topsep=0.3em,itemsep=0.2em}
+
+\title{\textbf{CJ Dropshipping}\\[0.4em]
+\large API connection manual\\
+and the buyy catalog integration}
+\author{buyy}
+\date{1 October 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Purpose}
+
+This manual records two things. The first is how the CJ Dropshipping API~2.0 is connected to a website you own: the host, the token, the points budget, and how a single product is fetched. The second is how that catalog is wired into the buyy store without mixing it into the buyy product table, cart, or Paystack checkout.
+
+The browser never calls CJ. A backend holds the API key, exchanges it for an access token, and serves pages from its own database.
+
+Official reference: \url{https://developers.cjdropshipping.cn/en/api/start/development.html}.
+
+The documentation site uses the \texttt{.cn} host. The API host uses \texttt{.com}. Calls are HTTPS, JSON, and UTF-8. URL paths are case-sensitive.
+
+\section{How a call is made}
+
+Every business URL has four parts:
+
+\begin{center}
+\texttt{https://developers.cjdropshipping.com/api2.0/v1/\{uri\}}
+\end{center}
+
+Example:
+
+\begin{center}
+\texttt{POST /api2.0/v1/authentication/getAccessToken}
+\end{center}
+
+Requests that carry a body send \texttt{Content-Type: application/json}. Every call except get-token and refresh-token sends the header \texttt{CJ-Access-Token}. Getting a token sends the API key in the JSON body and does not send that header.
+
+Every response uses the same envelope.
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Field & Meaning \\
+\midrule
+\texttt{code} & Result code. \texttt{200} means success. \\
+\texttt{result} & \texttt{true} when the call succeeded. \\
+\texttt{message} & Human text. Do not branch on it. \\
+\texttt{data} & Payload. Shape depends on the endpoint. \\
+\texttt{requestId} & Id to log when a call fails. \\
+\texttt{success} & \texttt{true} when the call succeeded. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Success is HTTP status 200 and either \texttt{code} equal to 200 or no \texttt{code} field. Anything else is a failure. Log \texttt{requestId} and \texttt{code}. By default an endpoint returns data only for the CJ account that owns the token.
+
+\section{Token}
+
+Create an API key in the CJ account (Apps, Install App, API, Add API, type API Key). The key looks like \texttt{CJUserNum@api@\ldots}. Store it only on the server. Do not commit it and do not send it to the browser.
+
+\subsection{Get a token}
+
+\texttt{POST /api2.0/v1/authentication/getAccessToken} with a JSON body that contains \texttt{apiKey}.
+
+Keep \texttt{openId}, \texttt{accessToken}, and \texttt{refreshToken}, plus both expiry dates, from the response. Do not hardcode a lifetime. Read the expiry timestamps from the response. Calling get-token again for the same account within 24 hours returns the same cached pair. The call itself is rate-limited like other endpoints.
+
+\subsection{Refresh and logout}
+
+Refresh with \path{POST /api2.0/v1/authentication/refreshAccessToken} and a JSON body that contains \texttt{refreshToken}. Replace the stored access token, refresh token, and both expiry dates.
+
+\texttt{POST /api2.0/v1/authentication/logout} with header \texttt{CJ-Access-Token} expires both tokens. The next call must use the API key again.
+
+Rules for the server:
+
+\begin{itemize}
+  \item Cache the access token. Do not call get-token on every product request.
+  \item If the access token is expired and the refresh token is still valid, refresh. If both are expired, call get-token with the API key.
+  \item Keep the API key, both tokens, and \texttt{openId} on the server. The access token must not be returned to the front end.
+  \item One CJ account is enough for one website. Each IP address may authenticate at most three CJ users.
+\end{itemize}
+
+\section{Rate limits}
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Limit & Value \\
+\midrule
+Per IP address & 10 requests per second \\
+Non-login interfaces & 30 requests per second \\
+Users per IP & 3 \\
+Free, or sales level 0 or 1 & 1 request per second \\
+Plus, or sales level 2 & 2 requests per second \\
+Prime, or sales level 3 & 4 requests per second \\
+Advanced, or sales level 4 or 5 & 6 requests per second \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Get-token uses that same per-account rate. A tight loop over product pages hits the per-second cap before it hits the daily points cap. Space catalog calls out.
+
+\section{API points}
+
+CJ replaced the older daily call-count cap with points. For accounts registered on or after 1 June 2026 this is already in effect. For older accounts it takes effect on 1 July 2026. Until that date, the older request limits still apply to that account.
+
+\[
+\text{daily total} = 50000 + \text{order conversion}
+\]
+
+Order conversion is the maximum transaction amount of the last three months, in US dollars, times 100. The total resets at 00:00 UTC. Points also refill during the day at \(\text{total}/1440\) per minute, and the available balance never rises above the daily total.
+
+The base budget is therefore \textbf{50{,}000 points per day} before any order conversion is added. Calls that are not in the cost table do not spend points.
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Endpoint & Points \\
+\midrule
+\texttt{/product/listV2}, \texttt{/product/list} & 50 \\
+\texttt{/product/query}, variant queries, most stock queries & 10 \\
+\texttt{/product/stock/getInventoryByPid} & 10 \\
+\texttt{/logistic/freightCalculate} and \texttt{freightCalculateTip} & 10 \\
+\texttt{/product/queryProductsByImage} & 1000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A buyy sync of one page is one list call (50 points) plus, for each of up to 20 products, a detail call and a stock call (10 + 10). That is about \(50 + 20 \times 20 = 450\) points for one page. Five pages is about 2{,}250 points, still inside the 50{,}000 base, but the one-request-per-second cap on a Free account makes that sync take several minutes.
+
+When points are not enough, CJ returns HTTP 429 with \texttt{code} 429 and a \texttt{pointsInfo} object (\texttt{usedToday}, \texttt{remaining}, \texttt{total}). Successful responses include the same object. Watch \texttt{remaining} during a long sync.
+
+If the account has no transaction amount for 30 days in a row, API access is suspended. A reminder email goes out after 7 days with no transactions. Reactivate it from the API page in the CJ account.
+
+\section{Fetching one product}
+
+A keyword search is not how you load one known item. Keyword search is \texttt{GET /product/listV2} (\texttt{page}, \texttt{size}, \texttt{keyWord}). That returns a page of matches. Each row has an \texttt{id}. That value is the product id, \texttt{pid}.
+
+To load one product you already know, call:
+
+\begin{center}
+\texttt{GET /api2.0/v1/product/query}
+\end{center}
+
+Pass \textbf{one} of these query parameters. Do not send all three.
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Parameter & Use it when \\
+\midrule
+\texttt{pid} & You have the product id from \texttt{listV2} or from a previous sync. \\
+\texttt{productSku} & You have the product SKU (the SPU), not the variant SKU. \\
+\texttt{variantSku} & You have a variant SKU such as \texttt{CJxxxx-Black}. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Examples:
+
+\begin{itemize}
+  \item \texttt{/product/query?pid=000B9312-456A-4D31-94BD-B083E2A198E8}
+  \item \texttt{/product/query?productSku=CJJJJTJT05843}
+  \item \texttt{/product/query?variantSku=CJJJJTJT05843-Black}
+\end{itemize}
+
+The detail payload includes the English name, images, description, \texttt{sellPrice} in US dollars, and a \texttt{variants} array. Each variant has a \texttt{vid}, a \texttt{variantSku}, and a \texttt{variantSellPrice}.
+
+\texttt{vid} is the variant id you send when you later create an order against CJ's own catalog, with \texttt{orderFlow} set to 1. \texttt{sku} is the fallback when you do not have \texttt{vid}. If the detail call does not include every variant, call \path{GET /product/variant/query} with \texttt{pid}. Stock for the whole product is \path{GET /product/stock/getInventoryByPid}, also with \texttt{pid}.
+
+\texttt{sellPrice} may be a single number or a range such as \texttt{8.13-8.62}. The currency is US dollars. The \texttt{unit} field is a selling measure such as pieces, not the currency.
+
+\section{Membership plans}
+
+These are the published monthly CJ account plans. Struck prices in the sheet are the previous list prices. Feature lists below are the rows visible on that sheet. Higher tiers also include the shared listing, employee, and store-authorization features of the free plan.
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Plan & Monthly & Previous list & Who it is for \\
+\midrule
+Free & \$0.00 & --- & Basic features for all CJ users \\
+Plus & \$15.99 & \$59 & New dropshippers \\
+Prime & \$19.99 & \$299 & Growing dropshippers \\
+Advanced & \$59.99 & \$599 & Advanced dropshippers \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Prime is marked as the hot-sales plan on the sheet.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{3.2cm}p{11cm}@{}}
+\toprule
+Plan & Included on the sheet \\
+\midrule
+Free &
+5 daily sourcing requests.
+Free and unlimited listing.
+Unlimited employee accounts.
+Unlimited store authorization.
+Order monitoring.
+24/7 support.
+Quality inspection. \\
+\addlinespace
+Plus &
+\$3 off \$10 coupon, times 2.
+5 VIP products.
+50\% off a course under \$10.
+10 extra daily sourcing requests.
+Free and unlimited listing.
+Unlimited employee accounts.
+Unlimited store authorization.
+Order monitoring. \\
+\addlinespace
+Prime &
+\$3 off \$10 coupon, times 5.
+10 VIP products.
+15 recommended products.
+50\% off a course under \$30.
+20 extra daily sourcing requests.
+Free and unlimited listing.
+Unlimited employee accounts.
+Unlimited store authorization. \\
+\addlinespace
+Advanced &
+\$3 off \$10 coupon, times 10.
+20 VIP products.
+25 recommended products.
+50\% off a course under \$100.
+50 extra daily sourcing requests.
+Free and unlimited listing.
+Unlimited employee accounts.
+Unlimited store authorization. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The API request rate follows the same names: Free is 1 request per second, Plus is 2, Prime is 4, and Advanced is 6. The 50{,}000 point base is separate from these subscription prices. Buying Plus, Prime, or Advanced does not, by itself, replace that points formula.
+
+\section{Orders, in brief}
+
+This manual does not turn on live fulfillment. The connection guide still defines the path, and it is recorded here so a later checkout change has a source.
+
+When a customer pays the store, the backend may create a matching CJ order. Create Order V3 is \texttt{POST /shopping/order/createOrderV3}. For CJ's own logistics, set \texttt{shopLogisticsType=2}, leave \texttt{storageId} empty, set \texttt{logisticName} from a freight quote, and set \texttt{orderFlow=1} with each line carrying a CJ \texttt{vid} or \texttt{sku}. \texttt{fromCountryCode} is often \texttt{CN}.
+
+The pay path after create is add-to-cart, confirm, save the parent order, then \texttt{payBalanceV2}, which spends CJ balance. Check \texttt{GET /shopping/pay/getBalance} first. Sandbox orders use \texttt{isSandbox=1} and do not spend real balance. Prove that path before any live pay call.
+
+Webhooks need a public HTTPS callback. \texttt{localhost} is rejected. Verify \texttt{sign} as HMAC-SHA256 of the raw body, using the decimal \texttt{openId} as the secret, then Base64. Do not put \texttt{openId} in client logs.
+
+\section{The buyy integration}
+
+buyy is the Ghana fashion store. Its own catalog is priced in Ghana cedis and checked out with Paystack. CJ specials are a second catalog. They are not rows in the buyy \texttt{Product} table, they are not in the buyy bag, and Paystack does not charge them.
+
+\subsection{What the shop shows}
+
+The category row under the search has a link labeled \textbf{CJ specials}. It opens \texttt{/cj}. The homepage rail under the sale products is titled \textbf{cj special}. Cards show a black \texttt{cj} badge and a US dollar price. Opening a card goes to \texttt{/cj/:id}. That page does not add the item to the buyy bag.
+
+\subsection{What is stored}
+
+\begin{center}
+\begin{tabular}{@{}lp{9.5cm}@{}}
+\toprule
+Table & Contents \\
+\midrule
+\texttt{CjAuth} & Access token, refresh token, both expiry times, and \texttt{openId}. Server only. \\
+\texttt{CjProduct} & CJ \texttt{pid}, name, description, USD price, image URL, category name, stock, and tags. The tag list always includes \texttt{cj}. \\
+\texttt{CjVariant} & CJ \texttt{vid}, \texttt{sku}, price, and option label. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The buyy shop, search, sales, and Paystack checkout keep reading \texttt{Product} only.
+
+\subsection{How a sync runs}
+
+The client in \path{server/lib/cj.js} talks only to \path{https://developers.cjdropshipping.com/api2.0/v1}.
+
+\begin{enumerate}
+  \item \texttt{CJ\_API\_KEY} lives in \texttt{server/.env}. It is not committed and it is not sent to the browser.
+  \item The server exchanges that key for an access token, stores it on \texttt{CjAuth}, and refreshes from the expiry dates. It does not request a new token on every product call.
+  \item An admin opens \texttt{/admin/cj}, enters a keyword and a page count (1 to 5), and posts to \texttt{POST /api/admin/cj/sync}.
+  \item The server pages \texttt{product/listV2} at 20 products per page, then calls \texttt{product/query} and \texttt{product/stock/getInventoryByPid} for each id. It waits about one second between CJ calls.
+  \item Rows are upserted into \texttt{CjProduct} and \texttt{CjVariant}.
+\end{enumerate}
+
+The storefront reads \texttt{GET /api/cj/products} and \texttt{GET /api/cj/products/:id} from that local table. A page view does not call CJ. Admin status is \texttt{GET /api/admin/cj/status}. It reports whether a key is configured and whether a token is still active. It does not return the key, the token, or \texttt{openId}.
+
+\subsection{What this pass does not do}
+
+Checkout still charges only buyy products through Paystack. No CJ order is created, no CJ balance is spent, and no webhook is registered. Those steps stay in the connection guide until a public HTTPS callback exists and a sandbox order has been proved.
+
+\end{document}

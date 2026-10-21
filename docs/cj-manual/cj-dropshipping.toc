@@ -1,0 +1,15 @@
+\contentsline {section}{\numberline {1}Purpose}{2}{section.1}%
+\contentsline {section}{\numberline {2}How a call is made}{2}{section.2}%
+\contentsline {section}{\numberline {3}Token}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Get a token}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Refresh and logout}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Rate limits}{3}{section.4}%
+\contentsline {section}{\numberline {5}API points}{3}{section.5}%
+\contentsline {section}{\numberline {6}Fetching one product}{4}{section.6}%
+\contentsline {section}{\numberline {7}Membership plans}{5}{section.7}%
+\contentsline {section}{\numberline {8}Orders, in brief}{5}{section.8}%
+\contentsline {section}{\numberline {9}The buyy integration}{6}{section.9}%
+\contentsline {subsection}{\numberline {9.1}What the shop shows}{6}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}What is stored}{6}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}How a sync runs}{6}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}What this pass does not do}{7}{subsection.9.4}%
