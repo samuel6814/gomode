@@ -1,11 +1,10 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Layers, ShieldCheck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import {
   NAVY_ACCENT,
   INK,
-  MUTED,
   CANVAS,
   WHITE,
   LINE,
@@ -41,14 +40,14 @@ const HeroWrapper = styled.section`
   background: ${CANVAS};
   border-bottom: 1px solid ${LINE};
   overflow: hidden;
-  padding: 2.5rem 1.25rem 3.5rem;
+  padding: 2rem 1.25rem 3.5rem;
 
   @media ${media.tabletUp} {
-    padding: 3.5rem 2.5rem 4rem;
+    padding: 3rem 2.5rem 4rem;
   }
 
   @media ${media.desktop} {
-    padding: 4.5rem 3.5rem 4.5rem;
+    padding: 3.5rem 3.5rem 4.5rem;
   }
 `;
 
@@ -57,19 +56,17 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2.75rem;
+  gap: 2rem;
 
   @media ${media.desktop} {
-    gap: 3.5rem;
+    gap: 3rem;
   }
 `;
 
 const TopMetaRow = styled.div`
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
+  justify-content: flex-start;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid ${LINE};
   animation: ${slideUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -95,30 +92,21 @@ const LiveBadge = styled.div`
   }
 `;
 
-const EditionTag = styled.div`
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: ${MUTED};
-`;
-
 /**
  * Main Layout Container:
- * On Mobile (< 1024px): Flex column where the right-side hero image comes FIRST (order: 1)
- * and the left-side text copy follows SECOND (order: 2).
- * On Desktop (>= 1024px): 2-Column Grid where text copy is on the left (order: 1)
- * and hero image is on the right (order: 2).
+ * Mobile (< 1024px): Hero image comes FIRST (order: 1), text copy follows SECOND (order: 2).
+ * Desktop (>= 1024px): 2-Column Grid where text is on the left (order: 1) and image on the right (order: 2).
  */
 const MainGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2.25rem;
+  gap: 2rem;
+  align-items: center;
 
   @media ${media.desktop} {
     display: grid;
-    grid-template-columns: 1.12fr 0.88fr;
-    gap: 3.5rem;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
     align-items: center;
   }
 `;
@@ -126,70 +114,33 @@ const MainGrid = styled.div`
 const HeroImageColumn = styled.div`
   order: 1;
   width: 100%;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: ${slideUp} 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
   @media ${media.desktop} {
     order: 2;
+    justify-content: flex-end;
   }
 `;
 
-const ImageCard = styled.div`
-  position: relative;
+const HeroImage = styled.img`
+  display: block;
   width: 100%;
-  background: ${WHITE};
-  border: 1px solid ${LINE};
-  overflow: hidden;
-  box-shadow: 0 14px 34px rgba(17, 20, 24, 0.08);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  max-width: 620px;
+  height: auto;
+  max-height: clamp(280px, 50vh, 620px);
+  object-fit: contain;
+  filter: drop-shadow(0 14px 28px rgba(17, 20, 24, 0.12));
+  transition: transform 0.4s ease;
 
   &:hover {
-    border-color: ${NAVY_ACCENT};
-    box-shadow: 0 18px 40px rgba(102, 138, 83, 0.16);
-
-    img {
-      transform: scale(1.02);
-    }
+    transform: scale(1.02);
   }
 
-  img {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: clamp(300px, 46vh, 560px);
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-`;
-
-const ImageBadge = styled.div`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(17, 20, 24, 0.88);
-  backdrop-filter: blur(8px);
-  color: ${WHITE};
-  font-family: ${FONT_HERO};
-  font-size: 0.65625rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.45rem 0.85rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  pointer-events: none;
-  z-index: 2;
-
-  .accent-circle {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: ${NAVY_ACCENT};
-    box-shadow: 0 0 6px rgba(102, 138, 83, 0.8);
+  @media ${media.tabletUp} {
+    max-height: clamp(340px, 56vh, 640px);
   }
 `;
 
@@ -198,23 +149,13 @@ const TitleColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.15rem;
+  width: 100%;
   animation: ${slideUp} 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 
   @media ${media.desktop} {
     order: 1;
     gap: 1.25rem;
   }
-`;
-
-const SubtitleTag = styled.span`
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: ${NAVY_ACCENT};
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
 `;
 
 const DisplayHeading = styled.h1`
@@ -299,86 +240,31 @@ const SecondaryCta = styled(Link)`
   }
 `;
 
-const HeroSpecsBar = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid ${LINE};
-
-  @media ${media.tabletUp} {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-`;
-
-const SpecItem = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-
-  .spec-icon {
-    color: ${NAVY_ACCENT};
-    margin-top: 2px;
-    flex-shrink: 0;
-  }
-
-  .spec-label {
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: ${INK};
-    margin: 0 0 0.2rem;
-  }
-
-  .spec-sub {
-    font-size: 0.75rem;
-    color: ${MUTED};
-    margin: 0;
-    line-height: 1.4;
-  }
-`;
-
 const HeroSection = () => {
   return (
     <HeroWrapper>
       <Container>
-        {/* Top Ticker / Status Bar */}
+        {/* Top Status Bar */}
         <TopMetaRow>
           <LiveBadge>
             <span className="pulse-dot" />
             <span>GoMode Studio // Release 01 Live</span>
           </LiveBadge>
-          <EditionTag>
-            Strict Small-Batch Archive • 15 Curated Pieces
-          </EditionTag>
         </TopMetaRow>
 
         {/* Main Content Grid: Image First on Mobile, Right on Desktop */}
         <MainGrid>
-          {/* Visual Hero Campaign Image */}
+          {/* Visual Hero Campaign Image: Pure Image, No Cards or Badges */}
           <HeroImageColumn>
-            <ImageCard>
-              <ImageBadge>
-                <span className="accent-circle" />
-                <span>ARCHIVE // RELEASE 01</span>
-              </ImageBadge>
-              <img
-                src="/gomode-hero.png"
-                alt="GoMode Apparel Campaign"
-                loading="eager"
-              />
-            </ImageCard>
+            <HeroImage
+              src="/gomode-hero.png"
+              alt="GoMode Apparel Campaign"
+              loading="eager"
+            />
           </HeroImageColumn>
 
           {/* Text Title & Call-To-Action Column */}
           <TitleColumn>
-            <SubtitleTag>
-              <Sparkles size={14} />
-              <span>Uncompromising Modern Apparel</span>
-            </SubtitleTag>
-
             <DisplayHeading>
               OWN YOUR
               <span className="accent-line">MODE.</span>
@@ -399,39 +285,6 @@ const HeroSection = () => {
             </ActionButtonGroup>
           </TitleColumn>
         </MainGrid>
-
-        {/* Specs & Assurance Bar */}
-        <HeroSpecsBar>
-          <SpecItem>
-            <div className="spec-icon">
-              <Layers size={18} />
-            </div>
-            <div>
-              <h5 className="spec-label">Artisanal Curation</h5>
-              <p className="spec-sub">Eco-friendly TENCEL™, rigid denim, and wool blends.</p>
-            </div>
-          </SpecItem>
-
-          <SpecItem>
-            <div className="spec-icon">
-              <ShieldCheck size={18} />
-            </div>
-            <div>
-              <h5 className="spec-label">Verified Sizing & Fit</h5>
-              <p className="spec-sub">Complimentary size exchanges across Greater Accra.</p>
-            </div>
-          </SpecItem>
-
-          <SpecItem>
-            <div className="spec-icon">
-              <Sparkles size={18} />
-            </div>
-            <div>
-              <h5 className="spec-label">Nationwide Fulfillment</h5>
-              <p className="spec-sub">Same-day dispatch and door-to-door delivery in Ghana.</p>
-            </div>
-          </SpecItem>
-        </HeroSpecsBar>
       </Container>
     </HeroWrapper>
   );
