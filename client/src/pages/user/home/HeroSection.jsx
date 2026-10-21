@@ -254,13 +254,21 @@ const HeroSection = () => {
 
         {/* Main Content Grid: Image First on Mobile, Right on Desktop */}
         <MainGrid>
-          {/* Visual Hero Campaign Image: Pure Image, No Cards or Badges */}
+          {/* Visual Hero Campaign Image: Pure Image, Optimized AVIF/WebP */}
           <HeroImageColumn>
-            <HeroImage
-              src="/gomode-hero.png"
-              alt="GoMode Apparel Campaign"
-              loading="eager"
-            />
+            <picture style={{ display: 'contents' }}>
+              <source type="image/avif" srcSet="/gomode-hero.avif" />
+              <source type="image/webp" srcSet="/gomode-hero.webp" />
+              <HeroImage
+                src="/gomode-hero.png"
+                alt="GoMode Apparel Campaign"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                width="1280"
+                height="955"
+              />
+            </picture>
           </HeroImageColumn>
 
           {/* Text Title & Call-To-Action Column */}
